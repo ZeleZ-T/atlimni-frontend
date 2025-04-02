@@ -1,0 +1,16 @@
+{
+  "name": "typescript-atlimni",
+  "version": "1.0.0",
+  "description": "A TypeScript project",
+  "main": "public/dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "run": "npm run build && http-server"
+  },
+  "author": "ZeleZ-T",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
