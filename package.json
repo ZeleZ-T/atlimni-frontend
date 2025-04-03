@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "run": "npm run build && http-server"
+    "start": "npm run build && http-server"
   },
   "author": "ZeleZ-T",
   "license": "MIT",
