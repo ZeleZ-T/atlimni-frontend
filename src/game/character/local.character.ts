@@ -1,8 +1,8 @@
 import Character from "./character.js";
 
 const localCharacter = new Character(
-    window.innerWidth/2 - 130,
-    window.innerHeight/2 -130,
+    0,
+    0,
     Math.random().toString(36).substring(7)
     );
 
