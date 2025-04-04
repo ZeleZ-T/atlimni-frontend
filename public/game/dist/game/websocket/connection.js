@@ -1,25 +1,18 @@
-import MessageDto from "./message.dto.js"
 import CharacterHandle from "../character/handler.character.js";
 import localCharacter from "../character/local.character.js";
-
 class Connection {
-    private static instance: Connection;
-    socket: WebSocket;
-
-    private constructor() {
+    constructor() {
         this.socket = new WebSocket('ws://' + '192.168.2.8:8080' + '/ws?room=1&user=' + localCharacter.name);
         this.socket.onmessage = this.onMessage;
     }
-
     static getInstance() {
         if (!Connection.instance) {
             Connection.instance = new Connection();
         }
         return Connection.instance;
     }
-
-    onMessage(event: MessageEvent) {
-        const dto = JSON.parse(event.data) as MessageDto;
+    onMessage(event) {
+        const dto = JSON.parse(event.data);
         if (dto.handler !== undefined) {
             switch (dto.handler) {
                 case 'character':
@@ -28,10 +21,8 @@ class Connection {
             }
         }
     }
-
-    send(data: MessageDto) {
+    send(data) {
         this.socket.send(JSON.stringify(data));
     }
 }
-
 export default Connection;

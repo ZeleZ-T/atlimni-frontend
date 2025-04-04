@@ -2,40 +2,46 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-    <title>Atlimni Online</title>
-    <link rel="icon" href="egypt.ico" type="image/x-icon">
-    <style>
-        .character {
-            position: absolute;
-            top: calc(50% - 130px);
-            left: calc(50% - 130px);
-            width: 260px;
-            height: 260px;
-        }
-        .character-img {
-            user-select: none;
-            position: absolute;
-            top: calc(50% - 130px);
-            left: calc(50% - 130px);
-            width: 260px;
-            height: 260px;
-        }
-        .player-name {
-            position: absolute;
-            top: calc(50% - 110px);
-            left: calc(50% - 60px);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            text-align: center;
-            font-size: 16px;
-            font-family: Consolas, monospace;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Atlimni Online</title>
+    <link rel="stylesheet" href="./global.css">
+    <link rel="stylesheet" href="./index/styles/login.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <script type="module" src="./dist/index.js"></script>
+    <div class="container">
+        <div class="card">
+            <img src="./images/logo.png" alt="Logo" class="logo">
+            <div class="tabs">
+                <button class="tab active" data-tab="guest">Guest</button>
+                <button class="tab" data-tab="login">Login</button>
+                <button class="tab" data-tab="signup">Sign Up</button>
+            </div>
+            <div class="tab-content active" id="guest">
+                <form>
+                    <input type="text" id="guest-name" placeholder="Name" required>
+                    <button type="button" id="guest-btn" class="guest-btn">Continue as Guest</button>
+                    <button type="button" id="google-guest-btn" class="google-btn">Continue with Google</button>
+                </form>
+            </div>
+            <div class="tab-content" id="login">
+                <form>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="button" id="login-btn" class="login-btn">Login</button>
+                    <button type="button" id="google-login-btn" class="google-btn">Continue with Google</button>
+                </form>
+            </div>
+            <div class="tab-content" id="signup">
+                <form>
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                    <input type="password" id="signup-password" placeholder="Password" required>
+                    <button type="button" id="signup-btn" class="signup-btn">Sign Up</button>
+                    <button type="button" id="google-signup-btn" class="google-btn">Continue with Google</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./index/dist/index.js"></script>
 </body>
 </html>

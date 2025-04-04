@@ -1,44 +1,38 @@
 import CharacterState from "./vo/state.vo.js";
 import Direction from "./vo/direction.vo.js";
-import Character from "./character.js";
 import connection from "../websocket/connection.js";
 import MessageDto from "../websocket/message.dto.js";
 import localCharacter from "./local.character.js";
 import Keys from "./vo/keys.vo.js";
-
 class MovementCharacter {
-    keysLast: Keys<number> = new Keys(Date.now());
-    keys: Keys<boolean> = new Keys(false);
-    characterState = new CharacterState(8, 'Idle2', true);
-
-    constructor(public character: Character) {
+    constructor(character) {
+        this.character = character;
+        this.keysLast = new Keys(Date.now());
+        this.keys = new Keys(false);
+        this.characterState = new CharacterState(8, 'Idle2', true);
         setInterval(this.move.bind(this), 10);
         setInterval(this.updateCharacterState.bind(this), 9);
     }
-
-    keyDownEvent(event: KeyboardEvent) {
+    keyDownEvent(event) {
         if ('wasd'.includes(event.key)) {
             this.keys.set(event.key, true);
             if (this.character.name === localCharacter.name) {
-                connection.getInstance().send(
-                    new MessageDto('character', 'foreignCharacterKeydown', {
-                        name: this.character.name,
-                        event: {key: event.key}
-                    }));
+                connection.getInstance().send(new MessageDto('character', 'foreignCharacterKeydown', {
+                    name: this.character.name,
+                    event: { key: event.key }
+                }));
             }
         }
     }
-
-    keyUpEvent(event: KeyboardEvent) {
+    keyUpEvent(event) {
         if ('wasd'.includes(event.key)) {
             this.keysLast.set(event.key, Date.now());
             this.keys.set(event.key, false);
             if (this.character.name === localCharacter.name) {
-                connection.getInstance().send(
-                    new MessageDto('character', 'foreignCharacterKeyup', {
-                        name: this.character.name,
-                        event: {key: event.key}
-                    }));
+                connection.getInstance().send(new MessageDto('character', 'foreignCharacterKeyup', {
+                    name: this.character.name,
+                    event: { key: event.key }
+                }));
             }
         }
         if (!this.keys.w && !this.keys.a && !this.keys.s && !this.keys.d) {
@@ -47,43 +41,40 @@ class MovementCharacter {
             this.characterState.stateUpdate = true;
         }
     }
-
     move() {
         const step = 0.2;
         const scene = document.getElementById('iso-scene') ?? new HTMLElement();
         const top = parseFloat(this.character.parent.style.top.replace('%', ''));
         const left = parseFloat(this.character.parent.style.left.replace('%', ''));
-
         const dir = this.calculateDir(this.keys);
         if (dir.Move.x !== 0 || dir.Move.y !== 0) {
-            console.log(scene.clientWidth)
-            console.log(scene.clientHeight)
+            console.log(scene.clientWidth);
+            console.log(scene.clientHeight);
         }
-
-        this.character.parent.style.left = (left + (step * 9/16) * dir.Move.x) + '%';
+        this.character.parent.style.left = (left + (step * 9 / 16) * dir.Move.x) + '%';
         this.character.parent.style.top = (top + step * dir.Move.y) + '%';
         this.character.parent.style.zIndex = top + step * dir.Move.y + '';
-
         if ((dir.Move.x !== 0 || dir.Move.y !== 0) && (this.characterState.state !== `Walk` || this.characterState.lookDir !== dir.Look)) {
             this.characterState.lookDir = dir.Look;
             this.characterState.state = `Walk`;
             this.characterState.stateUpdate = true;
         }
     }
-
-
-    calculateDir(keys: Keys<boolean>): Direction {
-        let moveDir = {x: 0, y: 0};
-
-        if (keys.a && !keys.d) moveDir.x = -1;
-        else if (keys.d && !keys.a) moveDir.x = 1;
-        else moveDir.x = 0;
-
-        if (keys.w && !keys.s) moveDir.y = -1;
-        else if (keys.s && !keys.w) moveDir.y = 1;
-        else moveDir.y = 0;
-
-        const lookDirMap = (str: string) => {
+    calculateDir(keys) {
+        let moveDir = { x: 0, y: 0 };
+        if (keys.a && !keys.d)
+            moveDir.x = -1;
+        else if (keys.d && !keys.a)
+            moveDir.x = 1;
+        else
+            moveDir.x = 0;
+        if (keys.w && !keys.s)
+            moveDir.y = -1;
+        else if (keys.s && !keys.w)
+            moveDir.y = 1;
+        else
+            moveDir.y = 0;
+        const lookDirMap = (str) => {
             switch (str) {
                 case '0,1': return 8;
                 case '1,1': return 7;
@@ -95,41 +86,30 @@ class MovementCharacter {
                 case '-1,1': return 1;
             }
         };
-
-        const lookDir = lookDirMap(
-            moveDir.x + ',' + moveDir.y
-        ) || -1;
-
+        const lookDir = lookDirMap(moveDir.x + ',' + moveDir.y) || -1;
         return new Direction(moveDir, lookDir);
     }
-
     lastKeysLookMargin() {
         const keysArray = this.keysLast.entries();
         keysArray.sort((a, b) => +b[1] - +a[1]);
-
         const mostRecentKey = keysArray[0];
         const secondMostRecentKey = keysArray[1];
-
         const withinMargin = (+mostRecentKey[1] - +secondMostRecentKey[1]) <= 100;
-
         if (withinMargin) {
-            const tempKeys: Keys<boolean> = new Keys(false);
-            tempKeys.set(mostRecentKey[0] as string, true);
-            tempKeys.set(secondMostRecentKey[0] as string, true);
+            const tempKeys = new Keys(false);
+            tempKeys.set(mostRecentKey[0], true);
+            tempKeys.set(secondMostRecentKey[0], true);
             this.characterState.lookDir = this.calculateDir(tempKeys).Look;
         }
     }
-
     updateCharacterState() {
         if (this.characterState.stateUpdate && this.characterState.lookDir !== -1) {
             this.character.image.src =
                 "assets/knight/" + this.characterState.state +
-                "/Knight_" + this.characterState.state +
-                "_dir" + this.characterState.lookDir + ".gif";
+                    "/Knight_" + this.characterState.state +
+                    "_dir" + this.characterState.lookDir + ".gif";
             this.characterState.stateUpdate = false;
         }
     }
-
 }
-
 export default MovementCharacter;

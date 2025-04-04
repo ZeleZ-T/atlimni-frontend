@@ -6,11 +6,12 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "start": "npm run build && http-server"
+    "start": "npm run build && live-server ./public --port=80 --entry-file=index.html"
   },
   "author": "ZeleZ-T",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "live-server": "^1.2.2"
   }
 }

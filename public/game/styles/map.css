@@ -1,0 +1,40 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle, #9b9b9b, #000000);
+    z-index: -10001;
+}
+
+#iso-scene {
+    align-items: center;
+    background: url("../assets/terrain/grass/grass_1.png") center center repeat;
+    overflow: hidden;
+    z-index: -10000;
+}
+
+@media (min-aspect-ratio: 16/9) {
+    #iso-scene {
+        height: 100vh;
+        width: calc(100vh * 16 / 9);
+        background-size: calc(500vh / 9);
+    }
+}
+
+@media (max-aspect-ratio: 16/9) {
+    #iso-scene {
+        width: 100vw;
+        height: calc(100vw * 9 / 16);
+        background-size: calc(500vw / 16);
+    }
+}

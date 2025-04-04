@@ -1,0 +1,57 @@
+.character {
+    position: relative;
+    top: 37.5%;
+    left: 37.5%;
+    width: calc(50% * 9 / 16);
+    height: 50%;
+}
+
+.character-img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.player-name {
+    position: relative;
+    top: 20%;
+    left: 50%;
+    width: max-content;
+    height: max-content;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    justify-content: center;
+    transform: translateX(-50%);
+}
+
+.character-shadow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: radial-gradient(ellipse, rgba(0, 0, 0, 0.5) 25%, rgba(0, 0, 0, 0) 100%);
+    z-index: -1;
+    border-radius: 50%;
+    transform: translateX(-50%);
+}
+
+@media (min-aspect-ratio: 16/9) {
+    .player-name {
+        font-size: calc(20vh / 9);
+    }
+    .character-shadow {
+        height: 8vh;
+        width: calc(8vh * 16/9);
+        border: calc(6vh / 9) solid #00afff;
+    }
+}
+
+@media (max-aspect-ratio: 16/9) {
+    .player-name {
+        font-size: calc(20vw / 16);
+    }
+    .character-shadow {
+        width: 8vw;
+        height: calc(8vw * 9/16);
+        border: calc(6vw / 16) solid #00afff;
+    }
+}
