@@ -4,17 +4,20 @@ import localCharacter from "../character/local.character.js";
 
 class Connection {
     private static instance: Connection;
+    public static gameServiceHost: string;
     socket: WebSocket;
 
     private constructor() {
-        this.socket = new WebSocket('ws://' + '192.168.2.8:8080' + '/ws?room=1&user=' + localCharacter.name);
+        this.socket = new WebSocket('ws://' + Connection.gameServiceHost + '/ws?room=1&user=' + localCharacter.name);
         this.socket.onmessage = this.onMessage;
     }
 
+    static init(gameServiceHost: string) {
+        Connection.gameServiceHost = gameServiceHost;
+        Connection.instance = new Connection();
+    }
+
     static getInstance() {
-        if (!Connection.instance) {
-            Connection.instance = new Connection();
-        }
         return Connection.instance;
     }
 
